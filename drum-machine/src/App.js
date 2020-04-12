@@ -1,6 +1,6 @@
-import react from './react';
-
-
+import React from 'react';
+import DrumPad from './DrumPad';
+import { render } from 'react-dom';
 
 
 const sounds = [
@@ -43,51 +43,35 @@ const sounds = [
     
   ]
   
+
+const App = () => (
+
+    <div id="display" className="display">
+    <h1>Drum Machine</h1>
+     {sounds.map( (sound, idx) => (
+  <DrumPad text={sound.key} key={idx} audio={sound.mp3} />
+  ))}
+      </div>
+
+);
+
   
-  const App = () => (
-        
-        <div id="display" className="display">
-      <h1>Drum Machine</h1>
-       {sounds.map( (sound, idx) => (
-    <DrumPad text={sound.key} key={idx} audio={sound.mp3} />
-    ))}
-        </div>
-      
-  );
+playSound = () => {
+  this.audio.current.play();
+    
+    const id = this.audio.current.id;
   
-      
+    const parent = this.audio.current.parentNode;
+    parent.classList.add('active');
     
-    class DrumPad extends React.Component{
-      constructor(props){
-        super(props);
-        
-        this.audio = React.createRef();
-      }
-        
-       
-  componentDidMount() {
-    this.audio.current.addEventListener('ended', (e) => {
-      const parent = e.target.parentNode;
-      parent.classList.remove('active');
-    });
-  }
-      
-   playSound = () => {
-      this.audio.current.play();
-        
-        const id = this.audio.current.id;
-      
-        const parent = this.audio.current.parentNode;
-        parent.classList.add('active');
-        
-     
-     // the parent is the drum-pad inside display
-        const display = parent.parentNode;
-     display.querySelector('h1').innerText =`${id} is playing`;
-      
-    
-  }
-      
+ 
+ // the parent is the drum-pad inside display
+    const display = parent.parentNode;
+ display.querySelector('h1').innerText =`${id} is playing`;
+  
+
+}
+
       
       render() {
         const { text, audio } = this.props;
@@ -122,6 +106,4 @@ const sounds = [
       }
     });
     
-  
-  ReactDOM.render(<App />,
-    document.getElementById('drum-machine'));
+    export default App
