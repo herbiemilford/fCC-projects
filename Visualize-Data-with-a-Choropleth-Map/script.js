@@ -72,7 +72,7 @@ const counties = await countiesResp.json();
         <p>${education.area_name} - ${education.state}</p>
         <p>${education.bachelorsOrHigher}%</p>
       `;
-  }).on('mouseout', () => {     tooltip.classList.remove('show');
+  }).on('mouseout', (d) => {     tooltip.classList.remove('show');
   });
   
   
