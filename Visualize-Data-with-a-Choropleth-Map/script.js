@@ -1,12 +1,12 @@
-const tooltip = document.getElementById('tooltip');
+const tooltip = 
+ document.getElementById('tooltip');
 
-
-// console.log('run')
 
 async function run() {
 
 const eduResp = await fetch('https://cdn.freecodecamp.org/testable-projects-fcc/data/choropleth_map/for_user_education.json');
-const educations = await eduResp.json();
+
+  const educations = await eduResp.json();
 
 const countiesResp = await fetch('https://cdn.freecodecamp.org/testable-projects-fcc/data/choropleth_map/counties.json');
 const counties = await countiesResp.json();
@@ -18,7 +18,7 @@ const counties = await countiesResp.json();
   
   const path = d3.geoPath();
   
- const data = topojson.feature(counties, counties.objects.counties).features
+ const data = topojson.feature(counties, counties.objects.counties).features;
  
    const minEdu = d3.min(educations, edu => edu.bachelorsOrHigher);
  
@@ -32,12 +32,8 @@ const counties = await countiesResp.json();
   const colors = [];
   
     for(let i=minEdu; i<=maxEdu; i+=step) {
-      colors.push(colorsScale(i));
+      colors.push(i);
     }
- 
-          
- 
- // const colors = [minEdu, maxEdu].map(edu => colorsScale(edu));
  
   const svg = d3.select('#container').append('svg')
           .attr('width', width)
@@ -50,13 +46,12 @@ const counties = await countiesResp.json();
   .enter()
   .append('path')
   .attr('class', 'county')
-  .attr('fill', d => colorsScale(educations.find(edu => edu.fips === d.id).bachelorsOrHigher ))
-  .attr('data-fips', d => d.id)
-  .attr('data-education', d => educations.find(edu => edu.fips === d.id).bachelorsOrHigher)
+  .attr('fill', d => 
+colorsScale(educations.find(edu => edu.fips === d.id).bachelorsOrHigher ))  
   .attr('d', path)
+    .attr('data-fips', d => d.id)
+    .attr('data-education', d => educations.find(edu => edu.fips === d.id).bachelorsOrHigher)
 
- 
-  
     .on('mouseover', (d, i) => {
       const { coordinates } = d.geometry;
       const [x, y] = coordinates[0][0];
@@ -72,11 +67,11 @@ const counties = await countiesResp.json();
         <p>${education.area_name} - ${education.state}</p>
         <p>${education.bachelorsOrHigher}%</p>
       `;
-  }).on('mouseout', (d) => {     tooltip.classList.remove('show');
+  }).on('mouseout', () => { tooltip.classList.remove('show');
   });
   
   
-//   // create the legend
+// the legend
   const legendWidth = 180;
   const legendHeight = 30;
   
@@ -87,7 +82,8 @@ const counties = await countiesResp.json();
     .attr('class', 'legend')
     .attr('width', legendWidth)
     .attr('height', legendHeight)
-    .selectAll('rect')
+  
+    legend.selectAll('rect')
     .data(colors)
     .enter()
     .append('rect')
@@ -95,7 +91,7 @@ const counties = await countiesResp.json();
     .attr('y', 0)
     .attr('width', legendRectWidth)
     .attr('height', legendHeight)
-    .attr('fill', c => c)
+    .attr('fill', c => colorsScale(c))
   
     
   }
